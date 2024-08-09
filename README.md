@@ -1,5 +1,3 @@
 # dezero
-# dezero
-# dezero
-# dezero
-# dezero
+参考《深度学习入门2: 自制框架这本书》
+
