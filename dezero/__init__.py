@@ -1,4 +1,4 @@
-is_simple = True
+is_simple = False
 if is_simple:
     from dezero.core_simple import Variable
     from dezero.core_simple import Function
@@ -8,6 +8,12 @@ if is_simple:
     from dezero.core_simple import setup_variable
     from dezero.core_simple import no_grad
 else:
-    None
+    from dezero.core import Variable
+    from dezero.core import Function
+    from dezero.core import using_config
+    from dezero.core import as_array
+    from dezero.core import as_variable
+    from dezero.core import setup_variable
+    from dezero.core import no_grad
 
 setup_variable()
