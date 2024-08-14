@@ -15,5 +15,7 @@ else:
     from dezero.core import as_variable
     from dezero.core import setup_variable
     from dezero.core import no_grad
+    import dezero.functions
+    import dezero.utils
 
 setup_variable()
