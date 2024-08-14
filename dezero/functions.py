@@ -180,6 +180,10 @@ class Sigmoid(Function):
         y = self.outputs[0]()
         gx = gy * y * (1 - y)
         return gx
+def sigmoid(x):
+    return Sigmoid()(x)
+def linear(x, W, b=None):
+    return Linear()(x, W, b)
 
 def linear_simple(x, W, b=None):
     t = matmul(x, W)
