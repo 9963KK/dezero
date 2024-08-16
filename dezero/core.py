@@ -286,3 +286,9 @@ def setup_variable():
     Variable.__rtruediv__ = rdiv
     Variable.__neg__ = neg
     Variable.__pow__ = pow
+
+
+# 对参数进行汇总
+
+class Parameter(Variable):
+    pass
