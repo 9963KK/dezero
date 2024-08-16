@@ -7,7 +7,7 @@ class Layer:
     def __init__(self):
         self._params = set()
     def __setattr__(self, name: str, value):
-        if isinstance(value, Parameter):
+        if isinstance(value, (Parameter, Layer)):
             self._params.add(name)
             # 只收集Parameter参数
         super().__setattr__(name, value)
@@ -22,7 +22,11 @@ class Layer:
         raise NotImplementedError
     def params(self):
         for name in self._params:
-            yield self.__dict__[name]
+            obj = self.__dict__[name]
+            if isinstance(obj, Layer):
+                yield from obj.params()  # 从Layer中取出参数
+            else:
+                yield obj
     def cleargrads(self):
         # 表明对所有参数调用cleargrad
         for param in self.params():
@@ -30,7 +34,7 @@ class Layer:
 
 # 实现作为层的Linear
 class Linear(Layer):
-    def __init__(self,  out_size, nobias=False, dtype=np.float32, in_size=None):
+    def __init__(self, out_size, nobias=False, dtype=np.float32, in_size=None):
         super().__init__()
         self.in_size, self.out_size = in_size, out_size
         self.dtype = dtype
@@ -57,3 +61,14 @@ class Linear(Layer):
         y = F.linear(x, self.W, self.b)
         return y
 
+
+# 实现两层神经网络
+class TwoLayerNet(Layer):
+    def __init__(self, hidden_size, out_size):
+        super().__init__()
+        self.l1 = Linear(hidden_size)
+        self.l2 = Linear(out_size)
+    def forward(self, x):
+        y = F.sigmoid(self.l1(x))
+        y = self.l2(y)
+        return y

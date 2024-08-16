@@ -17,5 +17,5 @@ else:
     from dezero.core import no_grad
     import dezero.functions
     import dezero.utils
-
+    from dezero.layers import Layer
 setup_variable()
