@@ -1,7 +1,7 @@
 # 汇总层的层
 import dezero.layers as L
 import dezero.functions as F
-from dezero import Layer
+from dezero import Variable, Layer, Model
 
 model = Layer()
 model.l1 = L.Linear(5)
