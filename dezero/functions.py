@@ -158,6 +158,17 @@ class Exp(Function):
         return gx
 def exp(x):
     return Exp()(x)
+class Log(Function):
+    def forward(self, x):
+        y = np.log(x)
+        return y
+    def backward(self, gy):
+        x = self.inputs[0]
+        gx = gy / x
+        return gx
+def log(x):
+    return Log()(x)
+
 # 为了节省内存，见图43-1，直接在内部实现Linear
 class Linear(Function):
     def forward(self, x, W, b):
@@ -223,3 +234,35 @@ class GetItem(Function):
 
 def get_item(x, slices):
     return GetItem(slices)(x)
+
+def softmax_simple(x):
+    x = as_variable(x)
+    y = exp(x)
+    sum_y = sum(y)
+    return y / sum_y
+class Clip(Function):
+    def __init__(self, x_min, x_max):
+        self.x_min = x_min
+        self.x_max = x_max
+    def forward(self, x):
+        y = np.clip(x, self.x_min, self.x_max)
+        return y
+    def backward(self, gy):
+        x = self.inputs[0]
+        mask = (x.data >= self.x_min) * (x.data <= self.x_max)
+        gx = gy * mask
+        return gx
+
+def clip(x, x_min, x_max):
+    x = as_variable(x)
+    return Clip(x_min, x_max)(x)
+def softmax_cross_entropy_simple(x, t):
+    x, t = as_variable(x), as_variable(t)
+    N = x.shape[0]
+
+    p = softmax_simple(x)
+    p = clip(p, 1e-15, 1.0) # 防止log(0)，将p限制在[1e-15, 1.0]之间
+    log_p = log(p)
+    tlog_p = log_p[np.arange(N), t.data]
+    y = -1 * sum(tlog_p) / N
+    return y
