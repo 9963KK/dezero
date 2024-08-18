@@ -136,7 +136,7 @@ class Function:
         ys = self.forward(*xs)
         if not isinstance(ys, tuple):
             ys = (ys,)
-        outputs = [Variable(as_array(y)) for y in ys]
+        outputs = [as_variable(as_array(y)) for y in ys]
         if Config.enable_backprop:
             self.generation = max([x.generation for x in inputs
                                    ])
@@ -235,6 +235,16 @@ class Pow(Function):
         gx = c * x ** (c - 1) * gy
         return gx
 
+
+class Exp(Function):
+    def forward(self, x):
+        y = np.exp(x)
+        return y
+
+    def backward(self, gy):
+        y = self.outputs[0]()
+        gx = gy * y
+        return gx
 
 def add(x0, x1):
     x1 = as_array(x1)
