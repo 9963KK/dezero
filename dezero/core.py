@@ -2,7 +2,6 @@ import numpy as np
 import contextlib
 import weakref
 import dezero
-import dezero
 import dezero.utils
 
 def as_array(x):
@@ -296,6 +295,8 @@ def setup_variable():
     Variable.__rtruediv__ = rdiv
     Variable.__neg__ = neg
     Variable.__pow__ = pow
+    Variable.__exp__ = exp
+    Variable.__getitem__ = dezero.functions.get_item
 
 
 # 对参数进行汇总
