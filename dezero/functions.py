@@ -256,7 +256,7 @@ class Clip(Function):
 def clip(x, x_min, x_max):
     x = as_variable(x)
     return Clip(x_min, x_max)(x)
-def softmax_cross_entropy_simple(x, t):
+def softmax_cross_entropy(x, t):
     x, t = as_variable(x), as_variable(t)
     N = x.shape[0]
 

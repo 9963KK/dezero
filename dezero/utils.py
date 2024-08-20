@@ -109,3 +109,13 @@ def sum_to(x, shape):
     if lead > 0:
         y = y.squeeze(lead_axis)
     return y
+
+
+def pair(x):
+    if isinstance(x, int):
+        return (x, x)
+    elif isinstance(x, tuple):
+        assert len(x) == 2
+        return x
+    else:
+        raise ValueError
